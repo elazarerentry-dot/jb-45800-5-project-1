@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Manager – Home</title>
+    <script defer src="app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>💰 Expense Manager</h1>
+    <nav id="navBar"></nav>
+
+    <form onsubmit="expensesFormFunc(event)">
+        <input type="hidden" id="isUpdate" value="false">
+        <input type="hidden" id="id" value="">
+
+        <select id="type" required>
+            <option selected disabled value="">Select a category</option>
+            <option value="food">🍔 Food</option>
+            <option value="gas">⛽ Gas</option>
+            <option value="leisure">🎮 Leisure</option>
+            <option value="authorities">🏛️ Authorities</option>
+            <option value="other">📦 Other</option>
+        </select>
+
+        <textarea id="description" placeholder="Description (required if 'Other')"></textarea>
+        <input type="number" id="cost" placeholder="Cost ($)" min="1" max="100000" required>
+        <input type="date" id="date" required>
+        <button id="submit" type="submit">➕ Submit</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Cost ($)</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+    </table>
+
+</body>
+
+</html>

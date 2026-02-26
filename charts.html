@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Manager – Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>📊 Charts & Reports</h1>
+    <nav id="navBar"></nav>
+
+    <div class="btn-group">
+        <button onclick="exportCSV()">⬇ Export CSV</button>
+        <button onclick="exportPDF()">⬇ Export PDF</button>
+    </div>
+
+    <div class="chart-card">
+        <h2>Expenses by Category</h2>
+        <canvas id="pieChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+        <h2>Expenses by Year</h2>
+        <canvas id="barChart"></canvas>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
