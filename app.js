@@ -188,33 +188,56 @@ function initCharts() {
         },
         options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
     })
+}
 
-    const yearTotals = {}
+// ── HISTOGRAM ──
+let histogramInstance = null
+
+function renderHistogram(mode) {
+    const expenses = getExpensesData()
+    const totals = {}
+    const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
     for (const e of expenses) {
         if (!e.date) continue
-        const year = e.date.split('-')[0]
-        yearTotals[year] = (yearTotals[year] || 0) + Number(e.cost)
+        const parts = e.date.split('-')
+        const key = mode === 'year' ? parts[0] : parts[0] + '-' + monthNames[+parts[1] - 1]
+        totals[key] = (totals[key] || 0) + Number(e.cost)
     }
 
-    new Chart(document.getElementById('barChart'), {
+    const sortedKeys = Object.keys(totals).sort()
+
+    document.getElementById('btnYear').style.background  = mode === 'year'  ? '#388E3C' : '#4CAF50'
+    document.getElementById('btnMonth').style.background = mode === 'month' ? '#388E3C' : '#4CAF50'
+
+    if (histogramInstance) histogramInstance.destroy()
+
+    histogramInstance = new Chart(document.getElementById('histogramChart'), {
         type: 'bar',
         data: {
-            labels: Object.keys(yearTotals),
+            labels: sortedKeys,
             datasets: [{
-                label: 'Total Expenses ($)',
-                data: Object.values(yearTotals),
-                backgroundColor: '#4CAF50',
-                borderRadius: 4
+                label: mode === 'year' ? 'Total per Year ($)' : 'Total per Month ($)',
+                data: sortedKeys.map(k => totals[k]),
+                backgroundColor: sortedKeys.map((_, i) => `hsl(${120 + i * 20}, 55%, 50%)`),
+                borderRadius: 5
             }]
         },
         options: {
             responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true } }
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => ' $' + ctx.parsed.y.toLocaleString() } }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { callback: v => '$' + v } },
+                x: { ticks: { maxRotation: 45, minRotation: 30 } }
+            }
         }
     })
 }
 
+// ── EXPORT ──
 function exportCSV() {
     const data = getExpensesData()
     if (!data.length) { alert('No expenses to export.'); return }
@@ -262,6 +285,7 @@ function exportPDF() {
     doc.save('expenses_report.pdf')
 }
 
+// ── INIT ──
 navBar()
 
 if (document.getElementById('tbody')) {
@@ -272,5 +296,7 @@ if (document.getElementById('tbody')) {
 if (window.location.pathname.endsWith('filter.html'))
     setSelecter()
 
-if (window.location.pathname.endsWith('charts.html'))
+if (window.location.pathname.endsWith('charts.html')) {
     initCharts()
+    renderHistogram('year')
+}

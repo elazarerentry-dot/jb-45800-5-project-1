@@ -24,8 +24,12 @@
     </div>
 
     <div class="chart-card">
-        <h2>Expenses by Year</h2>
-        <canvas id="barChart"></canvas>
+        <h2>📊 Histogram – Expenses Over Time</h2>
+        <div class="btn-group" style="margin:10px auto 16px;">
+            <button onclick="renderHistogram('year')" id="btnYear">📅 By Year</button>
+            <button onclick="renderHistogram('month')" id="btnMonth">🗓️ By Month</button>
+        </div>
+        <canvas id="histogramChart"></canvas>
     </div>
 
     <script src="app.js"></script>
